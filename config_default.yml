@@ -6,13 +6,11 @@ services:
     version: latest
     ram: 512M
     service_name: WebServer (Apache)
-    service_url: http://{}
+    service_url: http://{} (works also in https)
   nginx:
     enabled: false
     version: latest
     ram: 1024M
     document_root: /var/www
     service_name: WebServer (Nginx)
-    service_url: http://{}
-
-
+    service_url: http://{} (works also in https)
