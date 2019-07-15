@@ -2,17 +2,17 @@ version: '2.2'
 
 services:
     apache:
-        image: edyan/apache:${DOCKER_APACHE_VERSION}
-        mem_limit: ${DOCKER_APACHE_RAM}
         container_name: ${COMPOSE_PROJECT_NAME}_apache
-        hostname: ${COMPOSE_PROJECT_NAME}_apache
-        networks: [stakkr]
         environment:
-            APACHE_UID: ${DOCKER_UID}
-            APACHE_GID: ${DOCKER_GID}
+            APACHE_UID: ${DOCKER_UID:-33}
+            APACHE_GID: ${DOCKER_GID:-33}
+        image: edyan/apache:${DOCKER_APACHE_VERSION:-latest}
+        hostname: ${COMPOSE_PROJECT_NAME}_apache
+        labels:
+            - traefik.frontend.rule=Host:apache.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN:-localhost}
+        mem_limit: ${DOCKER_APACHE_RAM:-256M}
+        networks: [stakkr]
         volumes:
             - ${COMPOSE_BASE_DIR}/home/www-data:/home/www-data
             - ${COMPOSE_BASE_DIR}/logs/apache:/var/log/apache2
             - ${COMPOSE_BASE_DIR}/www:/var/www
-        labels:
-            - traefik.frontend.rule=Host:apache.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN}
