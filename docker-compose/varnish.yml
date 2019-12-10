@@ -1,0 +1,13 @@
+version: '2.2'
+
+services:
+    varnish:
+        container_name: ${COMPOSE_PROJECT_NAME}_varnish
+        image: varnish:${DOCKER_VARNISH_VERSION:-latest}
+        hostname: ${COMPOSE_PROJECT_NAME}_varnish
+        labels:
+            - traefik.frontend.rule=Host:varnish.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN:-localhost}
+        mem_limit: ${DOCKER_VARNISH_RAM:-256M}
+        networks: [stakkr]
+        volumes:
+            - ${COMPOSE_BASE_DIR}/conf/varnish/default.vcl:/etc/varnish/default.vcl:ro

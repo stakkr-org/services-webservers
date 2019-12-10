@@ -27,4 +27,13 @@ properties:
           document_root: { type: string }
           service_name: { type: string }
           service_url: { type: string }
+      varnish:
+        type: object
+        additionalProperties: false
+        properties:
+          enabled: { type: boolean }
+          version: { type: [string, number] }
+          ram: { type: string }
+          service_name: { type: string }
+          service_url: { type: string }
         required: [enabled, version, ram, service_name, service_url]

@@ -14,3 +14,9 @@ services:
     document_root: /var/www
     service_name: WebServer (Nginx)
     service_url: http://{} (works also in https)
+  varnish:
+    enabled: false
+    version: latest
+    ram: 256M
+    service_name: Cache Server (Varnish)
+    service_url: http://{} (works also in https)
