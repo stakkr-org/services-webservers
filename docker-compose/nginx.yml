@@ -16,4 +16,4 @@ services:
         volumes:
             - ${COMPOSE_BASE_DIR}/home/www-data:/home/www-data
             - ${COMPOSE_BASE_DIR}/logs/nginx:/var/log/nginx
-            - ${COMPOSE_BASE_DIR}/www:/var/www
+            - ${COMPOSE_BASE_DIR}/www:/var/www:delegated
