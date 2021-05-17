@@ -6,17 +6,17 @@ services:
     version: latest
     ram: 256M
     service_name: WebServer (Apache)
-    service_url: http(s)://{}
+    service_url: https://{}
   nginx:
     enabled: false
     version: latest
     ram: 256M
     document_root: /var/www
     service_name: WebServer (Nginx)
-    service_url: http(s)://{}
+    service_url: https://{}
   varnish:
     enabled: false
     version: latest
     ram: 256M
     service_name: Cache Server (Varnish)
-    service_url: http(s)://{}
+    service_url: https://{}
