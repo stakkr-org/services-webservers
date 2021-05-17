@@ -1,19 +1,22 @@
-version: '2.2'
+version: "3.8"
 
 services:
-    nginx:
-        container_name: ${COMPOSE_PROJECT_NAME}_nginx
-        image: edyan/nginx:${DOCKER_NGINX_VERSION:-latest}
-        environment:
-            NGINX_UID: ${DOCKER_UID}
-            NGINX_GID: ${DOCKER_GID}
-            NGINX_DOCUMENT_ROOT: ${DOCKER_NGINX_DOCUMENT_ROOT}
-        hostname: ${COMPOSE_PROJECT_NAME}_nginx
-        labels:
-            - traefik.frontend.rule=Host:nginx.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN:-localhost}
-        mem_limit: ${DOCKER_NGINX_RAM:-256M}
-        networks: [stakkr]
-        volumes:
-            - ${COMPOSE_BASE_DIR}/home/www-data:/home/www-data
-            - ${COMPOSE_BASE_DIR}/logs/nginx:/var/log/nginx
-            - ${COMPOSE_BASE_DIR}/www:/var/www:delegated
+  nginx:
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
+    image: edyan/nginx:${DOCKER_NGINX_VERSION:-latest}
+    environment:
+      NGINX_UID: ${DOCKER_UID}
+      NGINX_GID: ${DOCKER_GID}
+      NGINX_DOCUMENT_ROOT: ${DOCKER_NGINX_DOCUMENT_ROOT}
+    hostname: ${COMPOSE_PROJECT_NAME}_nginx
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.nginx.loadbalancer.server.port: 80
+      traefik.http.routers.nginx.tls: "true"
+      traefik.http.routers.nginx.rule: "Host(`nginx.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN}`)"
+    mem_limit: ${DOCKER_NGINX_RAM:-256M}
+    networks: [stakkr]
+    volumes:
+      - ${COMPOSE_BASE_DIR}/home/www-data:/home/www-data
+      - ${COMPOSE_BASE_DIR}/logs/nginx:/var/log/nginx
+      - ${COMPOSE_BASE_DIR}/www:/var/www:delegated

@@ -1,18 +1,21 @@
-version: '2.2'
+version: "3.8"
 
 services:
-    apache:
-        container_name: ${COMPOSE_PROJECT_NAME}_apache
-        environment:
-            APACHE_UID: ${DOCKER_UID:-33}
-            APACHE_GID: ${DOCKER_GID:-33}
-        image: edyan/apache:${DOCKER_APACHE_VERSION:-latest}
-        hostname: ${COMPOSE_PROJECT_NAME}_apache
-        labels:
-            - traefik.frontend.rule=Host:apache.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN:-localhost}
-        mem_limit: ${DOCKER_APACHE_RAM:-256M}
-        networks: [stakkr]
-        volumes:
-            - ${COMPOSE_BASE_DIR}/home/www-data:/home/www-data
-            - ${COMPOSE_BASE_DIR}/logs/apache:/var/log/apache2
-            - ${COMPOSE_BASE_DIR}/www:/var/www:delegated
+  apache:
+    container_name: ${COMPOSE_PROJECT_NAME}_apache
+    environment:
+      APACHE_UID: ${DOCKER_UID:-33}
+      APACHE_GID: ${DOCKER_GID:-33}
+    image: edyan/apache:${DOCKER_APACHE_VERSION:-latest}
+    hostname: ${COMPOSE_PROJECT_NAME}_apache
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.apache.loadbalancer.server.port: 80
+      traefik.http.routers.apache.tls: "true"
+      traefik.http.routers.apache.rule: "Host(`apache.${COMPOSE_PROJECT_NAME}.${PROXY_DOMAIN}`)"
+    mem_limit: ${DOCKER_APACHE_RAM:-256M}
+    networks: [stakkr]
+    volumes:
+      - ${COMPOSE_BASE_DIR}/home/www-data:/home/www-data
+      - ${COMPOSE_BASE_DIR}/logs/apache:/var/log/apache2
+      - ${COMPOSE_BASE_DIR}/www:/var/www:delegated
